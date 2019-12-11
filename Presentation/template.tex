@@ -1,0 +1,358 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Focus Beamer Presentation
+% LaTeX Template
+% Version 1.0 (8/8/18)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Pasquale Africa (https://github.com/elauksap/focus-beamertheme) with modifications by 
+% Vel (vel@LaTeXTemplates.com)
+%
+% Template license:
+% GNU GPL v3.0 License
+%
+% Important note:
+% The bibliography/references need to be compiled with bibtex.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\usetheme{focus} % Use the Focus theme supplied with the template
+% Add option [numbering=none] to disable the footer progress bar
+% Add option [numbering=fullbar] to show the footer progress bar as always full with a slide count
+
+% Uncomment to enable the ice-blue theme
+%\definecolor{main}{RGB}{92, 138, 168}
+%\definecolor{background}{RGB}{240, 247, 255}
+
+%------------------------------------------------
+
+\usepackage{booktabs} % Required for better table rules
+
+%----------------------------------------------------------------------------------------
+%	 TITLE SLIDE
+%----------------------------------------------------------------------------------------
+
+\title{Focus: \\ INTERIOR-POINT METHODS}
+
+%\subtitle{Subtitle}
+
+\author{\small  Jean KOUAGOU\\ Ariel KEMOGNE \\ Blessing BASSEY \\ Gedeon MUHAWENAYO}
+
+\titlegraphic{\includegraphics[scale=0.3]{Images/logo.jpeg}} % Optional title page image, comment this line to remove it
+
+\institute{African Masters for Machine Learning}% \\ Institute Address}
+
+\date{13 12 2019}
+
+%------------------------------------------------
+
+
+\begin{document}
+
+%------------------------------------------------
+\tableofcontents
+\begin{frame}
+	\maketitle % Automatically created using the information in the commands above
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	 SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Section 1} % Section title slide, unnumbered
+
+%------------------------------------------------
+
+\begin{frame}{Introduction}
+	An interior point method is a linear or nonlinear programming method that achieves optimization by going through the middle of the solid defined by the problem rather than around its surface.
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.6\linewidth]{Images/interior-point-methods-l}
+		\caption{Simplex versus interior point method}
+		%\label{fig:interior-point-methods-l}
+	\end{figure}
+	
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[noframenumbering]{Inequality constrained minimization}
+	\begin{equation*}
+	\begin{array}{cl}{\textbf{ Inequality constrained minimization }} \\[0.4cm]  {\text { minimize }} & {f_{0}(x)} \\ {\text { subject to }} & {f_{i}(x) \leq 0, \quad i=1, \ldots, m} \\ {} & {A x=b}\end{array}
+	\end{equation*}
+	\begin{itemize}
+		\item $f_i$ convex, twice continuously differentiable \\
+		 \item A $ \in \mathbf{R}^{p \times n} $ with rank $ A = p$ \\
+		 \item we assume  $ p^{\star} $  is finite and attained \\
+		 \item  we assume problem is strictly feasible: there exists $ \tilde{x}$ with $ \tilde{x} \in \operatorname{dom} f_{0},\ f_{i}  (\tilde{x})<0, \quad i=1, \ldots, m$,\ $A\tilde{x}=b$
+		  hence, strong duality holds and dual optimum is attained
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[noframenumbering]{Logarithmic barrier}
+	\textbf{Approximation with the indicator function}
+	\begin{equation*}
+	\begin{array}{ll}{\text { minimize }} & {f_{0}(x)+\sum_{i=1}^{m} I_{-}\left(f_{i}(x)\right)} \\ {\text { subject to }} & {A x=b}\end{array}
+	\end{equation*}
+where
+	$I_{-}(u)=0 \text { if } u \leq 0, I_{-}(u)=\infty
+	$ otherwise.\\ [0.4cm]
+	\textbf{Approximation via logarithmic barrier}
+	\begin{equation*}
+	\begin{array}{ll}{\text { minimize }} & {f_{0}(x)-(1 / t) \sum_{i=1}^{m} \log \left(-f_{i}(x)\right)} \\ {\text { subject to }} & {A x=b}\end{array}
+	\end{equation*}
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}[noframenumbering]{Logarithmic barrier function}
+	\begin{equation*}
+	\phi(x)=-\sum_{i=1}^{m} \log \left(-f_{i}(x)\right), \quad \operatorname{dom} \phi=\left\{x | f_{1}(x)<0, \ldots, f_{m}(x)<0\right\}
+	\end{equation*}
+	\begin{equation*}
+	\begin{array}{l}{\bullet \text { convex (follows from composition rules) }} \\ {\bullet \text { twice continuously differentiable, with derivatives }}\end{array}
+	\end{equation*}
+	\begin{equation*}
+	\begin{aligned} \nabla \phi(x) &=\sum_{i=1}^{m} \frac{1}{-f_{i}(x)} \nabla f_{i}(x) \\ \nabla^{2} \phi(x) &=\sum_{i=1}^{m} \frac{1}{f_{i}(x)^{2}} \nabla f_{i}(x) \nabla f_{i}(x)^{T}+\sum_{i=1}^{m} \frac{1}{-f_{i}(x)} \nabla^{2} f_{i}(x) \end{aligned}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}[noframenumbering]{Central path}
+\begin{equation*}
+\begin{aligned} \bullet \text { for } t>0, \text { define } x^{\star}(t) \text { as the solution of } \\ \qquad \begin{array}{ll}{\text { minimize }} & {t f_{0}(x)+\phi(x)} \\ {\text { subject to }} & {A x=b}\end{array} \end{aligned}
+\end{equation*}
+
+ (for now, assume $ x^{\star}(t) \text { exists and is unique for each } t>0 \text { ) }$
+ 
+~~~~~~~~~~~~~~~~~~~~$\bullet$  central path is $\left\{x^{\star}(t) | t>0\right\}$
+\end{frame}
+%------------------------------------------------
+\begin{frame}[noframenumbering]{Dual points on central path}
+\begin{equation*}
+\begin{aligned} \\ x=x^{\star}(t) \text { if there exists a } w \text { such that } \\ \qquad t \nabla f_{0}(x)+\sum_{i=1}^{m} \frac{1}{-f_{i}(x)} \nabla f_{i}(x)+A^{T} w=0, & \qquad A x=b \end{aligned}
+\end{equation*}
+
+\begin{equation*}
+\bullet \text { therefore, } x^{\star}(t) \text { minimizes the Lagrangian }
+\end{equation*}
+\begin{equation}
+L\left(x, \lambda^{\star}(t), \nu^{\star}(t)\right)=f_{0}(x)+\sum_{i=1}^{m} \lambda_{i}^{\star}(t) f_{i}(x)+\nu^{\star}(t)^{T}(A x-b)
+\end{equation}
+\begin{equation*}
+\text { where we define } \lambda_{i}^{\star}(t)=1 /\left(-t f_{i}\left(x^{\star}(t)\right) \text { and } \nu^{\star}(t)=w / t\right.
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}[noframenumbering]{Dual points on central path}
+\begin{equation*}
+\begin{array}{l}{x=x^{\star}(t), \lambda=\lambda^{\star}(t), \nu=\nu^{\star}(t) \text { satisfy }} \\ {\text { 1. primal constraints: } f_{i}(x) \leq 0, i=1, \ldots, m, A x=b} \\ {\text { 2. dual constraints: } \lambda \succeq 0} \\ {\text { 3. approximate slackness: }
+-\lambda_{i} f_{i}(x)=1 / t, i=1, \ldots, m} \\ {\text { 4. gradient of Lagrangian with respect to } x \text { vanishes: }}\end{array}
+\end{equation*}
+\begin{equation*}
+\nabla f_{0}(x)+\sum_{i=1}^{m} \lambda_{i} \nabla f_{i}(x)+A^{T} \nu=0
+\end{equation*}
+\begin{equation*}
+\text { difference with } \mathrm{KKT} \text { is that condition } 3 \text { replaces } \lambda_{i} f_{i}(x)=0
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}[noframenumbering]{Barrier Method}
+\begin{equation*}
+\begin{array}{l}{\text { given strictly feasible } x, t:=t^{(0)}>0, \mu>1, \text { tolerance } \epsilon>0} \\ {\text { repeat }} \\ {\text { 1. Compute } x^{\star}(t) \text { by minimizing } t f_{0}+\phi, \text { subject to } A x=b} \\ {\text { 2. Update. } x:=x^{\star}(t)} \\ {\text { 3. Stopping criterion. quit if } m / t<\epsilon} \\ {\text { 4. Increase } t . t:=\mu t}\end{array}
+\end{equation*}
+
+\begin{itemize}
+\item Terminates with $ f_{0}(x)-p^{\star} \leq \epsilon   f_{0}\left(x^{\star}(t)\right)-p^{\star} \leq m / t$
+\item centering usually done using Newton's method, starting at current $x$
+\item choice of $\mu$  involves a trade-off: $ \mu$ means fewer outer iterations
+\item  more inner (Newton) iterations; typical values:  $\mu=10-20$ several heuristics for choice of $ t^{(0)}$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[noframenumbering]{Barrier Method}
+\begin{equation*}
+\begin{array}{l}{\text { given strictly feasible } x, t:=t^{(0)}>0, \mu>1, \text { tolerance } \epsilon>0} \\ {\text { repeat }} \\ {\text { 1. Compute } x^{\star}(t) \text { by minimizing } t f_{0}+\phi, \text { subject to } A x=b} \\ {\text { 2. Update. } x:=x^{\star}(t)} \\ {\text { 3. Stopping criterion. quit if } m / t<\epsilon} \\ {\text { 4. Increase } t . t:=\mu t}\end{array}
+\end{equation*}
+
+\begin{itemize}
+	\item Terminates with $ f_{0}(x)-p^{\star} \leq \epsilon   f_{0}\left(x^{\star}(t)\right)-p^{\star} \leq m / t$
+	\item centering usually done using Newton's method, starting at current $x$
+	\item choice of $\mu$  involves a trade-off: $ \mu$ means fewer outer iterations
+	\item  more inner (Newton) iterations; typical values:  $\mu=10-20$ several heuristics for choice of $ t^{(0)}$
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[noframenumbering]{Convergence Analysis}
+\begin{equation*}
+\begin{array}{l}{\text { number of outer (centering) iterations: exactly }} \\ {\qquad\left[\frac{\log \left(m /\left(\epsilon t^{(0)}\right)\right)}{\log \mu}\right]} \\ { \text { plus the initial centering step (to compute }\left.x^{\star}\left(t^{(0)}\right)\right)}\end{array}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}[noframenumbering]{Convergence Analysis}
+\begin{equation*}
+\begin{array}{l}{\text { number of outer (centering) iterations: exactly }} \\ {\qquad\left[\frac{\log \left(m /\left(\epsilon t^{(0)}\right)\right)}{\log \mu}\right]} \\ { \text { plus the initial centering step (to compute }\left.x^{\star}\left(t^{(0)}\right)\right)}\end{array}
+\end{equation*}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{Images/example}
+	%\caption{}
+	\label{fig:example}
+\end{figure}
+\end{frame}
+\begin{equation}
+\begin{array}{l}{\text { Feasibility and phase I methods }} \\ {\text { feasibility problem: find } x \text { such that }} \\ {\qquad f_{i}(x) \leq 0, \quad i=1, \ldots, m, \quad A x=b}\end{array}
+\end{equation}
+\begin{frame}
+
+\end{frame}
+
+\begin{frame}{Typesetting and Math}
+	The packages \texttt{inputenc} and \texttt{FiraSans}\footnote{\url{https://fonts.google.com/specimen/Fira+Sans}}\textsuperscript{,}\footnote{\url{http://mozilla.github.io/Fira/}} are used to properly set the main fonts.
+	\vfill
+	This theme provides styling commands to typeset \emph{emphasized}, \alert{alerted}, \textbf{bold}, \textcolor{example}{example text}, \dots
+	\vfill
+	\texttt{FiraSans} also provides support for mathematical symbols:
+	\begin{equation*}
+		e^{i\pi} + 1 = 0.
+	\end{equation*}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	 SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Section 2}
+
+%------------------------------------------------
+
+\begin{frame}{Blocks}
+	These blocks are part of 1 slide, to be displayed consecutively.
+	\begin{block}{Block}
+		Text.
+	\end{block}
+	\pause % Automatically creates a new "page" split between the above and above + below
+	\begin{alertblock}{Alert block}
+		Alert \alert{text}.
+	\end{alertblock}
+	\pause % Automatically creates a new "page" split between the above and above + below
+	\begin{exampleblock}{Example block}
+		Example \textcolor{example}{text}.
+	\end{exampleblock}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Columns}
+	\begin{columns}
+		\column{0.5\textwidth}
+			This text appears in the left column and wraps neatly with a margin between columns.
+		
+		\column{0.5\textwidth}
+			\includegraphics[width=\linewidth]{Images/placeholder.jpg}
+	\end{columns}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Lists}
+	\begin{columns}[T, onlytextwidth] % T for top align, onlytextwidth to suppress the margin between columns
+		\column{0.33\textwidth}
+			Items:
+			\begin{itemize}
+				\item Item 1
+				\begin{itemize}
+					\item Subitem 1.1
+					\item Subitem 1.2
+				\end{itemize}
+				\item Item 2
+				\item Item 3
+			\end{itemize}
+		
+		\column{0.33\textwidth}
+			Enumerations:
+			\begin{enumerate}
+				\item First
+				\item Second
+				\begin{enumerate}
+					\item Sub-first
+					\item Sub-second
+				\end{enumerate}
+				\item Third
+			\end{enumerate}
+		
+		\column{0.33\textwidth}
+			Descriptions:
+			\begin{description}
+				\item[First] Yes.
+				\item[Second] No.
+			\end{description}
+	\end{columns}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Table}
+	\begin{table}
+		\centering % Centre the table on the slide
+		\begin{tabular}{l c}
+			\toprule
+			Discipline & Avg. Salary \\
+			\toprule
+			\textbf{Engineering} & \textbf{\$66,521} \\
+			Computer Sciences & \$60,005\\
+			Mathematics and Sciences & \$61,867\\
+			Business & \$56,720\\
+			Humanities \& Social Sciences & \$56,669\\
+			Agriculture and Natural Resources & \$53,565\\
+			Communications & \$51,448\\
+			\midrule
+			\textbf{Average for All Disciplines} & \textbf{\$58,114}\\
+			\bottomrule
+		\end{tabular}
+	\caption{Table caption}
+	\end{table}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}[focus]
+	Thanks for using \textbf{Focus}!
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	 CLOSING/SUPPLEMENTARY SLIDES
+%----------------------------------------------------------------------------------------
+
+\appendix
+
+\begin{frame}{References}
+	\nocite{*} % Display all references regardless of if they were cited
+	\bibliography{example.bib}
+	\bibliographystyle{plain}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Backup Slide}
+	This is a backup slide, useful to include additional materials to answer questions from the audience.
+	\vfill
+	The package \texttt{appendixnumberbeamer} is used to refrain from numbering appendix slides.
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+\end{document}

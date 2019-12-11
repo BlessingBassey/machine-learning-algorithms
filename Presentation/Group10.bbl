@@ -1,0 +1,13 @@
+\begin{thebibliography}{1}
+
+\bibitem{boyd2004convex}
+Stephen Boyd and Lieven Vandenberghe.
+\newblock {\em Convex optimization}.
+\newblock Cambridge university press, 2004.
+
+\bibitem{https://www.maths.ed.ac.uk/~gondzio/reports/ipmML.pdf}
+Jacek Gondzio.
+\newblock {\em Interior Point Methods in Machine Learning}.
+\newblock Cambridge, Massachusetts London, England, 2004.
+
+\end{thebibliography}
